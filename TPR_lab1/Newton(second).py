@@ -6,55 +6,43 @@ import matplotlib.pyplot as plt
 def f(x):
     return (x**2)/2 - np.cos(x)  # Квадратичная функция
 
-
 def df(x):
     return x + np.sin(x) # Первая производная
-
 
 def ddf(x):
     return 1 + np.cos(x)  # Вторая производная
 
-
-# Метод Ньютона для нахождения минимума
-def newton_method(f, df, ddf, x0, tol=1e-2, max_iter=100):
+# Метод Ньютона с выводом количества итераций
+def newton_method_with_iterations(x0, tol=1e-5, max_iter=400):
     x = x0
-    history = [x]  # Сохраняем историю точек для визуализации
-
-    for i in range(max_iter):
-        f_prime = df(x)
-        f_double_prime = ddf(x)
-
-        if abs(f_prime) < tol:  # Если градиент мал, останавливаемся
-            print(f"Минимум найден за {i + 1} итераций.")
+    iterations = 0
+    for _ in range(max_iter):
+        x_new = x - df(x) / ddf(x)
+        iterations += 1
+        if abs(x_new - x) < tol:
             break
-
-        # Обновляем x по методу Ньютона
-        x_next = x - f_prime / f_double_prime
-        history.append(x_next)
-
-        if abs(x_next - x) < tol:  # Проверка на сходимость
-            break
-
-        x = x_next
-
-    return x, history
-
+        x = x_new
+    return x, iterations
 
 # Начальная точка
-x0 = 2
+x0 = -1
+minimum, num_iterations = newton_method_with_iterations(x0)
 
-# Поиск минимума методом Ньютона
-minimum, history = newton_method(f, df, ddf, x0)
+print(f"Найденный минимум функции: x = {minimum}, f(x) = {f(minimum)} Количество итераций = {num_iterations}")
+print(f" Количество итераций = {num_iterations}" )
 
-# График функции и процесса нахождения минимума
-x_vals = np.linspace(-3, 3, 400)
-y_vals = f(x_vals)
+# Построение графика
+x_values = np.linspace(-3, 1, 400)
+y_values = f(x_values)
 
-plt.plot(x_vals, y_vals, label='f(x)')
-plt.scatter(history, [f(x) for x in history], color='red', s=80, zorder=5, label="Итерации")
-plt.scatter(minimum, f(minimum), color='black', s=100, zorder=10, label="Минимум")
-plt.title(f'Метод Ньютона. Минимум при x = {minimum:.5f}')
+plt.plot(x_values, y_values, label='f(x) = (x^2)/2 - cos(x)')
+plt.scatter(minimum, f(minimum), color='red', label='Минимум', zorder=5)
+plt.title('График функции и её минимум')
 plt.xlabel('x')
 plt.ylabel('f(x)')
+plt.axhline(0, color='black', lw=0.5, ls='--')
+plt.axvline(0, color='black', lw=0.5, ls='--')
 plt.legend()
+plt.grid()
 plt.show()
+
