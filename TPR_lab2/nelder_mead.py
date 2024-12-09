@@ -85,10 +85,10 @@ def nelder_mead(f, x0, tol=1e-6, max_iter=1000):
 
 # Определяем функцию для минимизации
 def f(x):
-    return x[0] ** 2 + x[1] ** 2 + np.exp(x[0] + x[1])
+    return 2 * x[0] - 5 * x[1] + np.exp(x[0]**2 + (x[1]**2/2))
 
 # Начальная точка
-x0 = np.array([1.0, 1.0])
+x0 = np.array([1.0, 0])
 
 # Запуск метода Нелдера-Мида
 minimum, f_min, iterations, simplex_history = nelder_mead(f, x0)
@@ -100,7 +100,7 @@ print("Количество итераций:", iterations)
 # Построение графика
 # Создание сетки для отображения уровней функции
 x_range = np.linspace(-1, 1.5, 200)
-y_range = np.linspace(-1, 1.5, 200)
+y_range = np.linspace(-1, 2, 200)
 X, Y = np.meshgrid(x_range, y_range)
 Z = X ** 2 + Y ** 2 + np.exp(X + Y)
 

@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 
 # Определяем функцию и её градиент
 def f(x1, x2):
-    return x1**2 + x2**2 + np.exp(x1 + x2)
+    return 2 * x1 - 5 * x2 + np.exp(x1**2 + (x2**2/2))
 
 def grad_f(x1, x2):
-    df_dx1 = 2*x1 + np.exp(x1 + x2)
-    df_dx2 = 2*x2 + np.exp(x1 + x2)
+    df_dx1 = 2 + 2 * x1 * np.exp(x1**2 + (x2**2/2))
+    df_dx2 = -5 + x2 * np.exp(x1**2 + (x2**2/2))
     return np.array([df_dx1, df_dx2])
 
 # Градиентный метод с дроблением шага
@@ -35,7 +35,7 @@ def gradient_descent_with_line_search(f, grad_f, x0, alpha=0.1, tol=1e-6, max_it
     return x, f(x[0], x[1]), iter_count, trajectory
 
 # Начальная точка
-x0 = (1, 1)
+x0 = (1, 0)
 
 # Запуск градиентного спуска
 minimum, min_value, iterations, trajectory = gradient_descent_with_line_search(f, grad_f, x0)
@@ -47,7 +47,7 @@ print(f"Количество итераций: {iterations}")
 # Построение графика
 # Создание сетки для отображения уровней функции
 x_range = np.linspace(-1, 1.5, 200)
-y_range = np.linspace(-1, 1.5, 200)
+y_range = np.linspace(-1, 2, 200)
 X, Y = np.meshgrid(x_range, y_range)
 Z = X ** 2 + Y ** 2 + np.exp(X + Y)
 
