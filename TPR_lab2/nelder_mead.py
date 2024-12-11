@@ -102,7 +102,7 @@ print("Количество итераций:", iterations)
 x_range = np.linspace(-1, 1.5, 200)
 y_range = np.linspace(-1, 2, 200)
 X, Y = np.meshgrid(x_range, y_range)
-Z = X ** 2 + Y ** 2 + np.exp(X + Y)
+Z = 2 * X - 5 * Y + np.exp(X**2 + (Y**2 / 2))
 
 # Настройка графика
 plt.figure(figsize=(10, 8))
