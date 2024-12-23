@@ -12,8 +12,8 @@ class State:
         self.prev_dir = prev_dir
         self.next_cells = next_cells
 
-# Начальное распределение методом северо-западного угла
-def solve(a, b, costs):
+# Начальный опорный план
+def severZapad(a, b, costs):
     assert len(costs) == len(a)
     assert len(costs[0]) == len(b)
     a_sum = sum(a)
@@ -47,15 +47,16 @@ def solve(a, b, costs):
             b_copy[j] = 0
             j += 1
 
+        print_plan(x)
+
         if sum(a_copy) == 0 and sum(b_copy) == 0:
             break
 
     result = sum(x[cell.row][cell.col] * costs[cell.row][cell.col] for cell in indexes_for_baza)
-    print(f"Z = {result} (метод северо-западного угла)")
+    print(f"F = {result} решение с помощью метода северо-западного угла")
 
     potential_method(a, b, x, costs, indexes_for_baza)
 
-# Улучшение базисного плана методом потенциалов
 def potential_method(a, b, x, costs, indexes_for_baza):
     m, n = len(a), len(b)
 
@@ -112,8 +113,16 @@ def potential_method(a, b, x, costs, indexes_for_baza):
             if x[cell.row][cell.col] == 0:
                 indexes_for_baza.remove(cell)
 
+        print_plan(x)
+
     result = sum(x[cell.row][cell.col] * costs[cell.row][cell.col] for cell in indexes_for_baza)
-    print(f"Z = {result} (метод потенциалов)")
+    print(f"F = {result} решение с помощью метода потенциалов")
+
+def print_plan(plan):
+    print("Текущий план поставок:")
+    for row in plan:
+        print(row)
+    print()
 
 # Замкнутый цикл для перераспределения значений
 def build_path(start_cell, baza_cells):
@@ -152,13 +161,5 @@ if __name__ == "__main__":
         [5, 3, 4, 4]
     ]
 
-    solve(a, b, costs)
+    severZapad(a, b, costs)
 
-    # a = [30, 20, 40, 50]
-    # b = [35, 20, 55, 30]
-    # costs = [
-    #     [2, 4, 1, 3],
-    #     [5, 6, 5, 4],
-    #     [3, 7, 9, 5],
-    #     [1, 2, 2, 7]
-    # ]
